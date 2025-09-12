@@ -1,0 +1,148 @@
+{
+    "layer": "top",
+    "position": "top",
+    //"mode": "dock",
+    "exclusive": "true",
+    "passthrough": "false",
+    "height": "20",
+    "gtk-layer-shell": true,
+
+    "modules-left": ["custom/launcher", "custom/divider", "cpu", "custom/divider", "custom/gpu-usage", "custom/divider", "memory", "custom/divider", "disk", "custom/divider", "hyprland/workspaces"],
+    "modules-center": ["clock"],
+    "modules-right": ["custom/updates", "custom/divider", "pulseaudio", "custom/divider", "custom/temp", "custom/divider", "custom/gpu-temperature", "custom/divider", "custom/gpu-power", "custom/divider", "custom/weather", "custom/divider", "tray"],
+
+    "clock": {
+        "format": " {:%a, %e %b, %H:%M }"
+    },
+    
+    "hyprland/workspaces": {
+    "format": "{icon}",
+    "all-outputs": "true",
+	"on-click": "activate",
+	"format-icons": {
+	"1": "",
+	"2": "",
+	"3": "",
+	"4": "",
+	"5": "",
+    "6": "",
+    "7": "",
+    "8": "",
+    "9": "󰊴",
+	"urgent": "",
+	"active": "",
+	"default": ""
+    },
+    "sort-by-number": true
+    },
+    
+    "custom/gpu-usage": {
+        "exec": "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits",
+        "format": "  {}%",
+        "return-type": "",
+        "interval": 4
+    },
+
+    "custom/gpu-temperature": {
+        "exec": "nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits",
+        "format": " {}°C",
+        "return-type": "",
+        "interval": 4
+    },
+
+    "custom/gpu-power": {
+        "exec": "nvidia-smi --query-gpu=power.draw --format=csv,noheader",
+        "format": " {}",
+        "return-type": "",
+        "interval": 4
+    },
+
+    "custom/launcher": {
+        "tootltip": false,
+        "format" : " 󰣇",
+    },
+
+    "cpu": {
+        "interval": 1,
+        "format" : "  {usage}%",
+        "max-length": 10
+    },
+
+    "memory": {
+        "interval": 1,
+        "format": " {}%",
+        "max-length": 10
+    },
+
+    "custom/weather": {
+        "exec": "~/.config/waybar/wittr.sh",
+        "return-type": "json",
+        "format": "{}",
+        "tooltip": true,
+        "interval": 900,
+    },
+
+    "network": {
+        "interval": 1,
+        //"interface": "wlp2s0",
+        "format": "{ifname}",
+        "format-wifi": " {essid} ({signalStrength}%) ",
+        "format-ethernet": " {ipaddr} ",
+        "format-disconnected": "Disconnected ", //An empty format will hide the module.
+        "tooltip-format": "{ifname} via {gwaddr}",
+        "tooltip-format-wifi": " {essid} ({signalStrength}%)",
+        "tooltip-format-ethernet": " {ifname}",
+        "tooltip-format-disconnected": "Disconnected",
+        "max-length": 50,
+        "exec": "ghostty -e nmcli dev wifi "
+    },
+
+    "custom/updates":{
+        "format": " {} Update(s)",
+        "exec": "checkupdates | wc -l",
+        //"exec-if": "[[ $(checkupdates | wc -l) != 0 ]]",
+        "interval": 1800,
+        "on-click": "kitty -e paru -Syu && notify-send 'The system has been updated' "
+    },	
+        
+    "pulseaudio": {
+        "format": "{icon}",
+        "tooltip": false,
+        "format-muted": " Muted",
+        "on-click": "pavucontrol", 
+        "on-scroll-up": "",
+        "on-scroll-down": "",
+        "scroll-step": 5,
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        }
+    },
+
+	"tray":{
+		"icon-size":18,
+		"spacing": 10
+	},
+
+	"custom/temp": {
+        "exec": "$HOME/.config/waybar/cputemp.sh",
+        "format": " {}°C",
+        "tooltip": true,
+        "interval": 4
+    }, 
+
+    "disk": {
+      	"interval": 30,
+  	"format": " {free}/{total}",
+        "unit": "GB"
+    },
+
+    "custom/divider": {
+        "format": "|"
+    }
+}

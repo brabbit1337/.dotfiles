@@ -1,0 +1,191 @@
+include /etc/sway/config.d/*
+include ~/.config/sway/settings
+
+set $script_dir /usr/local/bin
+
+exec dbus-update-activation-environment --all
+
+seat seat0 xcursor_theme $cursor_theme $cursor_size
+
+# GTK SETTINGS
+exec_always {
+    gsettings set org.gnome.desktop.interface gtk-theme $gtk_theme
+    gsettings set org.gnome.desktop.interface icon-theme $icon_theme
+    gsettings set org.gnome.desktop.interface font-name $font
+    gsettings set org.gnome.desktop.interface monospace-font-name $monospace_font
+    gsettings set org.gnome.desktop.wm.preferences button-layout ':'
+    gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
+    gsettings set org.gnome.desktop.interface cursor-size $cursor_size
+}
+
+# OUTPUT CONFIGURATION
+
+# Wallpaper
+output * bg /home/gyorkosi/Pictures/wp15474309-stark-varg-wallpapers.jpg fill
+
+# Monitor
+#output eDP-1 resolution 192x1080@180Hz adaptive_sync on allow_tearing yes
+
+# Monitor
+output eDP-1 resolution 192x1080@180Hz
+
+# IDLE CONFIGURATION
+exec swayidle -w \
+    timeout 420 $script_dir/lock \
+    timeout 410 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+    before-sleep $script_dir/lock
+
+for_window [class="^.*"] inhibit_idle fullscreen
+for_window [app_id="^.*"] inhibit_idle fullscreen
+
+# INPUT CONFIGURATION
+input type:pointer {
+    accel_profile "flat"
+    pointer_accel 0.12
+}
+
+input type:touchpad {
+    accel_profile adaptive
+    drag enabled
+    dwt enabled
+    natural_scroll disabled
+    tap enabled
+}
+
+input type:keyboard {
+    xkb_layout "hu"
+    xkb_variant ",latinyz"
+    xkb_options "grp:alt_shift_toggle,caps:super"
+}
+
+# WINDOW DECORATIONS
+gaps inner 5
+gaps outer 0
+default_border pixel 2
+default_floating_border pixel 2
+
+# FLOATING RULES
+for_window [window_type="dialog"] floating enable
+for_window [window_role="dialog"] floating enable
+
+for_window [app_id="org.pulseaudio.pavucontrol"] floating enable
+for_window [app_id="galculator"] floating enable
+for_window [instance="gufw.py"] floating enable
+
+# GENERAL KEYBINDINGS
+
+# Start a terminal
+bindsym $mod+Return exec $term
+
+# Start browser
+bindsym $mod+b exec $web
+
+# Start steam
+bindsym $mod+g exec steam
+
+# Start file browser
+bindsym $mod+e exec $file_browser
+
+# Kill focused window
+bindsym $mod+q kill
+
+# Start your launcher
+bindsym $mod+a exec $menu
+
+floating_modifier $mod normal
+
+# Reload the configuration file
+bindsym $mod+Shift+r reload
+
+# Exit sway (logs you out of your Wayland session)
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+# Move your focus around
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+# WORKSPACES
+set $ws1  1
+set $ws2  2
+set $ws3  3
+set $ws4  4
+set $ws5  5
+
+# Workspace keybindings
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+
+bindsym $mod+shift+1 move container to workspace number $ws1
+bindsym $mod+shift+2 move container to workspace number $ws2
+bindsym $mod+shift+3 move container to workspace number $ws3
+bindsym $mod+shift+4 move container to workspace number $ws4
+bindsym $mod+shift+5 move container to workspace number $ws5
+
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+v floating toggle
+
+# Swap focus between the tiling area and the floating area
+bindsym $mod+Shift+Tab focus mode_toggle
+
+# Toggle the fullscreen
+bindsym $mod+f fullscreen toggle
+
+
+bindsym $mod+r mode "< R >"
+
+# UTILITIES/ACTION KEYBINDINGS
+
+# Special keys to adjust volume via PulseAudio
+bindsym --locked XF86AudioMute exec pactl set-sink-mute \@DEFAULT_SINK@ toggle
+bindsym --locked XF86AudioLowerVolume exec $script_dir/volume-decrease
+bindsym --locked XF86AudioRaiseVolume exec $script_dir/volume-increase
+
+# Special keys to adjust brightness via brightnessctl
+bindsym --locked XF86MonBrightnessDown exec $script_dir/brightness-decrease
+bindsym --locked XF86MonBrightnessUp exec $script_dir/brightness-increase
+
+# Special key to take a screenshot with grim
+bindsym Print exec $script_dir/screenshot-menu
+
+# Display power menu
+bindsym --release $mod+Mod1+q exec $script_dir/power-menu
+
+# STATUS BAR
+bar {
+    position top
+
+    swaybar_command waybar
+    
+    icon_theme $icon_theme
+
+    colors {
+        statusline $fg
+        background $bg
+        #                   border  bg      text
+        focused_workspace   $accent $accent $bg
+        inactive_workspace  $bg     $bg     $fg
+        urgent_workspace    $bg     $bg     $fg
+    }
+}
+
+# WINDOW COLORS
+# class                 border  backgr. text    indicator child_border
+client.focused          $accent $bg     $fg     $accent   $accent
+client.focused_inactive $bg     $bg     $fg     $bg       $bg
+client.unfocused        $bg     $bg     $fg     $bg       $bg
+client.urgent           $bg     $bg     $fg     $bg       $bg
+client.placeholder      $bg     $bg     $fg     $bg       $bg
+
+client.background       $bg
+
+# AUTOSTART
+exec_always {
+    pidof /usr/lib/mate-polkit/polkit-mate-authentication-agent-1 || /usr/lib/mate-polkit/polkit-mate-authentication-agent-1
+    pidof dunst || dunst
+    #pidof steam || steam -silent
+}

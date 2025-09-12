@@ -1,0 +1,37 @@
+# Modifier key
+set $mod Mod4
+
+# Direction keys
+set $left h
+set $down j
+set $up k
+set $right l
+
+# Terminal emulator
+set $term alacritty
+
+# Application launcher
+set $menu 'rofi -show drun'
+
+# Web browser
+set $web vivaldi
+
+# Graphical file browser
+set $file_browser thunar
+
+# Colors
+set $accent #afa193
+set $bg #101010
+set $bg-alt #252525
+set $fg #f6f1ea
+
+# GTK theme settings
+set $font "Meslo LGS Nerd Font 10"
+set $monospace_font "Meslo LGS Nerd Font 10"
+set $icon_theme "Papirus-Dark"
+set $gtk_theme "Tokyonight-Dark"
+set $cursor_theme "Adwaita"
+set $cursor_size 24
+
+# Font
+font pango: Meslo LGS Nerd Font 16
