@@ -14,9 +14,9 @@ BarBlock {
 
   content: BarText {
     text: "󰣇"
-    pointSize: 20
-    anchors.horizontalCenterOffset: 5
-    anchors.verticalCenterOffset: 0
+    pointSize: 24
+    anchors.horizontalCenterOffset: 4
+    anchors.verticalCenterOffset: 3
   }
 
   color: "transparent"
