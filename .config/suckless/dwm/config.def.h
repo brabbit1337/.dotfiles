@@ -36,6 +36,7 @@ static const char *const autostart[] = {
     "picom", "-b", NULL,
     "sh", "-c", "feh --bg-fill ~/Pictures/GL3OJDYX0AA77uh.jpg", NULL,
     "slstatus", NULL,
+    "xrandr", "--output", "DisplayPort-0", "--mode", "1920x1080", "--rate", "180", NULL,
 	NULL /* terminate */
 };
 
