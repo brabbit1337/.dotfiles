@@ -5,15 +5,19 @@
 
 #include "bar_ltsymbol.h"
 #include "bar_status.h"
+#include "bar_winicon.h"
 #include "bar_tags.h"
 #include "bar_wintitle.h"
 #include "bar_systray.h"
 
 /* Other patches */
+#include "recttoclient.h"
 #include "cool_autostart.h"
 #include "placemouse.h"
+#include "restartsig.h"
 #include "togglefullscreen.h"
 #include "vanitygaps.h"
 /* Layouts */
+#include "layout_monocle.h"
 #include "layout_tile.h"
 
